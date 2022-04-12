@@ -1,13 +1,12 @@
-from multiprocessing.connection import Client
 from django.db import models
-from accounts.models import User, Customer
+from accounts.models import User, Client
 
 
 
 # Create your models here.
 class Contract(models.Model):
     sales_contact = models.ForeignKey(User, on_delete=models.CASCADE)
-    client = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
@@ -19,14 +18,20 @@ class Contract(models.Model):
 
 
 class EventStatus(models.Model):
-    status = models.CharField(max_length=25)
+
+    EVENT_STATUS = [
+        ('incoming', 'incoming'),
+        ('past', 'past')
+    ]
+
+    status = models.CharField(choices=EVENT_STATUS, max_length=25)
 
     def __str__(self):
         return f"{self.status}"
 
 
 class Event(models.Model):
-    client = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     support_contact = models.ForeignKey(User, on_delete=models.CASCADE)

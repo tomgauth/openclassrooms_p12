@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
     
 
 class User(AbstractUser):
+    # Refacto
     SALES = "sales_member"    
     SUPPORT = "support_member"
     ADMIN = "admin"
@@ -14,15 +15,15 @@ class User(AbstractUser):
         (SUPPORT, "support_member"),
         (ADMIN, "admin_member")
     )
-    email = models.EmailField(unique=True, max_length=100)
-    role = models.CharField(max_length=25, choices=ROLE_CHOICES, null=True, blank=True)
+    email = models.EmailField(unique=True, max_length=100,  null=True, blank=True)
+    role = models.CharField(max_length=25, choices=ROLE_CHOICES, default='NONE', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.email} | {self.role}"
+        return f"{self.email} | {self.role} | id: {self.id}"
     
 
 
-class Customer(models.Model):
+class Client(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     email = models.EmailField(unique=True, max_length=100)
@@ -33,3 +34,5 @@ class Customer(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)    
     
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} | {self.email}"
